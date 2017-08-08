@@ -15,6 +15,7 @@ PACKAGE_NAME = 'cassandra'
 DEFAULT_TASK_COUNT = 3
 FOLDERED_SERVICE_NAME = sdk_utils.get_foldered_name(PACKAGE_NAME)
 DEFAULT_CASSANDRA_TIMEOUT = 600
+SERVICE_NAME = os.environ.get('SERVICE_NAME') or PACKAGE_NAME
 
 DEFAULT_NODE_ADDRESS = os.getenv('CASSANDRA_NODE_ADDRESS', sdk_hosts.autoip_host(PACKAGE_NAME, 'node-0-server'))
 FOLDERED_NODE_ADDRESS = sdk_hosts.autoip_host(FOLDERED_SERVICE_NAME, 'node-0-server')
