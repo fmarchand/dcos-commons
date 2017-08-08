@@ -99,7 +99,7 @@ def run_backup_and_restore(
     except:
         log.info("Error during delete (normal if no stale data).")
         fb = traceback.format_exc()
-        sdk_utils.out(tb)
+        log.info(tb)
 
     # Write data to Cassandra with a metronome job, then verify it was written
     # Note: Write job will fail if data already exists
