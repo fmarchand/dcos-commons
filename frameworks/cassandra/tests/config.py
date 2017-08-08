@@ -1,6 +1,7 @@
 """ Utilties specific to Cassandra tests """
 
 import os
+import logging
 
 import sdk_hosts
 import sdk_jobs
@@ -94,7 +95,7 @@ def run_backup_and_restore(
     try:
         jobs.run_job(delete_data_job)
     except:
-        sdk_utils.out("Error during delete (normal if no stale data).")
+        log.info("Error during delete (normal if no stale data).")
         fb = traceback.format_exc()
         sdk_utils.out(tb)
 
