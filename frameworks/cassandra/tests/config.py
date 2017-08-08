@@ -89,6 +89,15 @@ def run_backup_and_restore(
     delete_data_job = get_delete_data_job(node_address=job_node_address)
     verify_deletion_job = get_verify_deletion_job(node_address=job_node_address)
 
+
+    # Ensure the keyspaces we will use aren't present.
+    try:
+        jobs.run_job(delete_data_job)
+    except:
+        sdk_utils.out("Error during delete (normal if no stale data).")
+        fb = traceback.format_exc()
+        sdk_utils.out(tb)
+
     # Write data to Cassandra with a metronome job, then verify it was written
     # Note: Write job will fail if data already exists
     sdk_jobs.run_job(write_data_job)
