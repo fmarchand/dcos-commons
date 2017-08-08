@@ -8,6 +8,7 @@ import sdk_jobs
 import sdk_plan
 import sdk_utils
 
+log = logging.getLogger(__name__)
 
 PACKAGE_NAME = 'cassandra'
 DEFAULT_TASK_COUNT = 3
