@@ -1,6 +1,7 @@
 '''Utilities relating to installing services'''
 
 import collections
+import logging
 
 import dcos.errors
 import dcos.marathon
@@ -13,7 +14,7 @@ import sdk_api
 import sdk_plan
 import sdk_utils
 
-from retrying import retry
+log = logging.getLogger(__name__)
 
 TIMEOUT_SECONDS = 15 * 60
 
@@ -38,14 +39,14 @@ def install(package_name,
             additional_options={},
             package_version=None,
             timeout_seconds=TIMEOUT_SECONDS,
-            check_suppressed=True):
+            wait_for_deployment=True):
     if not service_name:
         service_name = package_name
     start = time.time()
     merged_options = get_package_options(additional_options)
 
-    sdk_utils.out('Installing {}/{} with options={} version={}'.format(
-        package_name, service_name, merged_options, package_version))
+    log.info('Installing %s/%s with options=%s version=%s',
+             package_name, service_name, merged_options, package_version)
 
     # 1. Install package, wait for tasks, wait for marathon deployment
     retried_shakedown_install(
@@ -56,26 +57,23 @@ def install(package_name,
         timeout_seconds,
         expected_running_tasks)
 
-    # Regardless of check_suppressed, it's safe to wait for the deployment from an install to complete
-    # before proceeding. This can take a while, default is 15 minutes. For example with HDFS, we can hit
-    # the expected total task count via FINISHED tasks, without actually completing deployment.
-    sdk_utils.out("Waiting for {}/{} to finish deployment plan...".format(package_name, service_name))
-    sdk_plan.wait_for_completed_deployment(service_name, timeout_seconds)
+    if wait_for_deployment:
+        # wait for the deployment from an install to complete
+        # before proceeding. This can take a while, default is 15 minutes. For example with HDFS, we can hit
+        # the expected total task count via FINISHED tasks, without actually completing deployment.
+        log.info("Waiting for %s/%s to finish deployment plan...", package_name, service_name)
+        sdk_plan.wait_for_completed_deployment(service_name, timeout_seconds)
 
-    # 2. Wait for the scheduler to be idle (as implied by deploy plan completion and suppressed bit)
-    # This should be skipped ONLY when it's known that the scheduler will be stuck in an incomplete state.
-    if check_suppressed:
-        # given the above wait for plan completion, here we just wait up to 5 minutes
-        sdk_utils.out("Waiting for {}/{} to be suppressed...".format(
-            package_name, service_name))
+        # 2. Wait for the scheduler to be idle (as implied by deploy plan completion and suppressed bit)
+        # This should be skipped ONLY when it's known that the scheduler will be stuck in an incomplete state.
+        # Given the above wait for plan completion, here we just wait up to 5 minutes
+        log.info("Waiting for %s/%s to be suppressed...", package_name, service_name)
         shakedown.wait_for(
             lambda: sdk_api.is_suppressed(service_name),
             noisy=True,
             timeout_seconds=5 * 60)
 
-    sdk_utils.out('Installed {}/{} after {}'.format(package_name, service_name,
-                                                    shakedown.pretty_duration(
-                                                        time.time() - start)))
+    log.info('Installed %s/%s after %s', package_name, service_name, shakedown.pretty_duration(time.time() - start))
 
 
 def uninstall(service_name,
@@ -89,13 +87,12 @@ def uninstall(service_name,
         package_name = service_name
 
     if shakedown.dcos_version_less_than("1.10"):
-        sdk_utils.out('Uninstalling/janitoring {}'.format(service_name))
+        log.info('Uninstalling/janitoring %s', service_name)
         try:
             shakedown.uninstall_package_and_wait(
                 package_name, service_name=service_name)
         except (dcos.errors.DCOSException, ValueError) as e:
-            sdk_utils.out('Got exception when uninstalling package, ' +
-                          'continuing with janitor anyway: {}'.format(e))
+            log.info('Got exception when uninstalling package, continuing with janitor anyway: %s', e)
 
         janitor_start = time.time()
 
@@ -119,19 +116,18 @@ def uninstall(service_name,
 
         finish = time.time()
 
-        sdk_utils.out(
-            'Uninstall done after pkg({}) + janitor({}) = total({})'.format(
-                shakedown.pretty_duration(janitor_start - start),
-                shakedown.pretty_duration(finish - janitor_start),
-                shakedown.pretty_duration(finish - start)))
+        log.info('Uninstall done after pkg(%s) + janitor(%s) = total(%s)',
+                 shakedown.pretty_duration(janitor_start - start),
+                 shakedown.pretty_duration(finish - janitor_start),
+                 shakedown.pretty_duration(finish - start))
     else:
-        sdk_utils.out('Uninstalling {}'.format(service_name))
+        log.info('Uninstalling %s', service_name)
         try:
             shakedown.uninstall_package_and_wait(
                 package_name, service_name=service_name)
             # service_name may already contain a leading slash:
             marathon_app_id = '/' + service_name.lstrip('/')
-            sdk_utils.out('Waiting for no deployments for {}'.format(marathon_app_id))
+            log.info('Waiting for no deployments for %s', marathon_app_id)
             shakedown.deployment_wait(TIMEOUT_SECONDS, marathon_app_id)
 
             # wait for service to be gone according to marathon
@@ -139,20 +135,18 @@ def uninstall(service_name,
                 client = shakedown.marathon.create_client()
                 app_list = client.get_apps()
                 app_ids = [app['id'] for app in app_list]
-                sdk_utils.out('Marathon apps: {}'.format(app_ids))
+                log.info('Marathon apps: %s', app_ids)
                 matching_app_ids = [
                     app_id for app_id in app_ids if app_id == marathon_app_id
                 ]
                 if len(matching_app_ids) > 1:
-                    sdk_utils.out('Found multiple apps with id {}'.format(
-                        marathon_app_id))
+                    log.info('Found multiple apps with id %s', marathon_app_id)
                 return len(matching_app_ids) == 0
-            sdk_utils.out('Waiting for no {} Marathon app'.format(marathon_app_id))
+            log.info('Waiting for no %s Marathon app', marathon_app_id)
             shakedown.time_wait(marathon_dropped_service, timeout_seconds=TIMEOUT_SECONDS)
 
         except (dcos.errors.DCOSException, ValueError) as e:
-            sdk_utils.out(
-                'Got exception when uninstalling package: {}'.format(e))
+            log.info('Got exception when uninstalling package: %s', e)
         finally:
             sdk_utils.list_reserved_resources()
 

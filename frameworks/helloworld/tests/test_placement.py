@@ -1,6 +1,7 @@
-import pytest
-
 import json
+import logging
+
+import pytest
 
 import shakedown
 import sdk_cmd
@@ -14,15 +15,17 @@ from tests.config import (
     PACKAGE_NAME
 )
 
+log = logging.getLogger(__name__)
+
 num_private_agents = len(shakedown.get_private_agents())
 
 
 @pytest.fixture(scope='module', autouse=True)
-def configure_package(configure_universe):
+def configure_package(configure_security):
     try:
         sdk_install.uninstall(PACKAGE_NAME)
 
-        yield # let the test session execute
+        yield  # let the test session execute
     finally:
         sdk_install.uninstall(PACKAGE_NAME)
 
@@ -44,14 +47,14 @@ def test_rack_not_found():
     }
 
     # scheduler should fail to deploy, don't wait for it to complete:
-    sdk_install.install(PACKAGE_NAME, 0, additional_options=options, check_suppressed=False)
+    sdk_install.install(PACKAGE_NAME, 0, additional_options=options, wait_for_deployment=False)
     try:
         sdk_tasks.check_running(PACKAGE_NAME, 1, timeout_seconds=60)
         assert False, "Should have failed to deploy anything"
     except AssertionError as arg:
         raise arg
     except:
-        pass # expected to fail
+        pass  # expected to fail
 
     pl = sdk_plan.get_deployment_plan(PACKAGE_NAME)
 
@@ -241,7 +244,7 @@ def setup_constraint_switch():
     agents = shakedown.get_private_agents()
     some_agent = agents[0]
     other_agent = agents[1]
-    print("agents", some_agent, other_agent)
+    log.info('Agents: %s %s', some_agent, other_agent)
     assert some_agent != other_agent
     options = {
         "service": {
