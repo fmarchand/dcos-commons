@@ -1,0 +1,13 @@
+{
+  "packagingVersion": "3.0",
+  "minDcosReleaseVersion": "1.8",
+  "name": "hdfs-noha",
+  "version": "{{package-version}}",
+  "maintainer": "fmarchand@agaetis.fr",
+  "description": "A simple HDFS service without HA (Only one namenode and no Zookeeper) on DC/OS. A typical use case would be to deploy a HDFS cluster just to be able to work with a notebook and Spark",
+  "selected": false,
+  "framework": true,
+  "tags": ["hdfsnoha"],
+  "postInstallNotes": "HDFS Non-HA is being installed!\n\n\tDocumentation: TBD !",
+  "postUninstallNotes": "DC/OS HDFS Non-HA is being uninstalled."
+}

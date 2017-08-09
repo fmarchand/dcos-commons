@@ -1,0 +1,98 @@
+name: {{FRAMEWORK_NAME}}
+scheduler:
+  principal: {{FRAMEWORK_PRINCIPAL}}
+  user: {{FRAMEWORK_USER}}
+pods:
+  namenode:
+    count: 1
+    placement: {{NAME_PLACEMENT}}
+    user: {{FRAMEWORK_USER}}
+    {{#ENABLE_VIRTUAL_NETWORK}}
+    networks:
+      {{VIRTUAL_NETWORK_NAME}}:
+        labels: {{CNI_PLUGIN_LABELS}}
+    {{/ENABLE_VIRTUAL_NETWORK}}
+    uris:
+      - "{{HADOOP_BUNDLE_URI}}"
+      - "{{BOOTSTRAP_URI}}"
+    tasks:
+      node:
+        goal: RUNNING
+        cmd: >
+          export JAVA_HOME=$(ls -d $MESOS_SANDBOX/jre*/) &&
+          ./bootstrap && {{HDFS_VERSION}}/bin/hadoop namenode -format &&
+          export TASK_IP=$(./bootstrap --get-task-ip) && echo "NAMENODE IP : $TASK_IP" &&
+          ./bootstrap && {{HDFS_VERSION}}/bin/hdfs namenode
+        cpus: {{NAME_CPUS}}
+        memory: {{NAME_MEM}}
+        ports:
+          name-rpc:
+            port: {{TASKCFG_ALL_NAME_NODE_RPC_PORT}}
+          name-http:
+            port: {{TASKCFG_ALL_NAME_NODE_HTTP_PORT}}
+        configs:
+          core-site:
+            template: {{CONFIG_TEMPLATE_PATH}}/core-site.xml
+            dest: {{HDFS_VERSION}}/etc/hadoop/core-site.xml
+          hdfs-site:
+            template: {{CONFIG_TEMPLATE_PATH}}/hdfs-site.xml
+            dest: {{HDFS_VERSION}}/etc/hadoop/hdfs-site.xml
+        volume:
+          path: "hdfsnoha-name-path"
+          type: {{NAME_DISK_TYPE}}
+          size: {{NAME_DISK}}
+        readiness-check: # wait for the namenode to answer to hadoop fs
+          cmd: export JAVA_HOME=$(ls -d $MESOS_SANDBOX/jre*/) && ./{{HDFS_VERSION}}/bin/hadoop fs -ls hdfs://namenode-$POD_INSTANCE_INDEX-node.hdfsnoha.mesos/
+          interval: 5
+          delay: 0
+          timeout: 60
+  datanode:
+    count: {{NODE_COUNT}}
+    placement: {{NODE_PLACEMENT}}
+    user: {{FRAMEWORK_USER}}
+    {{#ENABLE_VIRTUAL_NETWORK}}
+    networks:
+      {{VIRTUAL_NETWORK_NAME}}:
+        labels: {{CNI_PLUGIN_LABELS}}
+    {{/ENABLE_VIRTUAL_NETWORK}}
+    uris:
+        - "{{HADOOP_BUNDLE_URI}}"
+        - "{{BOOTSTRAP_URI}}"
+    tasks:
+      node:
+        goal: RUNNING
+        cmd: >
+           export JAVA_HOME=$(ls -d $MESOS_SANDBOX/jre*/) &&
+           export TASK_IP=$(./bootstrap --get-task-ip) && echo "DATANODE IP : $TASK_IP" &&
+           ./bootstrap && {{HDFS_VERSION}}/bin/hdfs datanode
+        cpus: {{NODE_CPUS}}
+        memory: {{NODE_MEM}}
+        ports:
+          data-rpc:
+            port: {{TASKCFG_ALL_DATA_NODE_RPC_PORT}}
+          data-http:
+            port: {{TASKCFG_ALL_DATA_NODE_HTTP_PORT}}
+          data-ipc:
+            port: {{TASKCFG_ALL_DATA_NODE_IPC_PORT}}
+        configs:
+          core-site:
+            template: {{CONFIG_TEMPLATE_PATH}}/core-site.xml
+            dest: {{HDFS_VERSION}}/etc/hadoop/core-site.xml
+          hdfs-site:
+            template: {{CONFIG_TEMPLATE_PATH}}/hdfs-site.xml
+            dest: {{HDFS_VERSION}}/etc/hadoop/hdfs-site.xml
+        volume:
+          path: "hdfsnoha-data-path"
+          type: {{NODE_DISK_TYPE}}
+          size: {{NODE_DISK}}
+
+plans:
+  deploy:
+    strategy: serial
+    phases:
+      namenode-phase:
+        strategy: serial
+        pod: namenode
+      datanode-phase:
+        strategy: parallel
+        pod: datanode

@@ -1,0 +1,3 @@
+PACKAGE_NAME = 'hdfsnoha'
+DEFAULT_TASK_COUNT = 1
+
