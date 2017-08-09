@@ -22,21 +22,36 @@
     "binaries": {
       "darwin": {
         "x86-64": {
-          "contentHash": [ { "algo":"sha256", "value":"{{sha256:dcos-elastic-darwin}}" } ],
+          "contentHash": [
+            {
+              "algo": "sha256",
+              "value": "{{sha256:dcos-elastic-darwin}}"
+            }
+          ],
           "kind": "executable",
           "url": "{{artifact-dir}}/dcos-elastic-darwin"
         }
       },
       "linux": {
         "x86-64": {
-          "contentHash": [ { "algo":"sha256", "value":"{{sha256:dcos-elastic-linux}}" } ],
+          "contentHash": [
+            {
+              "algo": "sha256",
+              "value": "{{sha256:dcos-elastic-linux}}"
+            }
+          ],
           "kind": "executable",
           "url": "{{artifact-dir}}/dcos-elastic-linux"
         }
       },
       "windows": {
         "x86-64": {
-          "contentHash": [ { "algo":"sha256", "value":"{{sha256:dcos-elastic.exe}}" } ],
+          "contentHash": [
+            {
+              "algo": "sha256",
+              "value": "{{sha256:dcos-elastic.exe}}"
+            }
+          ],
           "kind": "executable",
           "url": "{{artifact-dir}}/dcos-elastic.exe"
         }

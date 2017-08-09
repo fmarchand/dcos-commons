@@ -17,21 +17,36 @@
     "binaries": {
       "darwin": {
         "x86-64": {
-          "contentHash": [ { "algo":"sha256", "value":"{{sha256:dcos-hello-world-darwin}}" } ],
+          "contentHash": [
+            {
+              "algo": "sha256",
+              "value": "{{sha256:dcos-hello-world-darwin}}"
+            }
+          ],
           "kind": "executable",
           "url": "{{artifact-dir}}/dcos-hello-world-darwin"
         }
       },
       "linux": {
         "x86-64": {
-          "contentHash": [ { "algo":"sha256", "value":"{{sha256:dcos-hello-world-linux}}" } ],
+          "contentHash": [
+            {
+              "algo": "sha256",
+              "value": "{{sha256:dcos-hello-world-linux}}"
+            }
+          ],
           "kind": "executable",
           "url": "{{artifact-dir}}/dcos-hello-world-linux"
         }
       },
       "windows": {
         "x86-64": {
-          "contentHash": [ { "algo":"sha256", "value":"{{sha256:dcos-hello-world.exe}}" } ],
+          "contentHash": [
+            {
+              "algo": "sha256",
+              "value": "{{sha256:dcos-hello-world.exe}}"
+            }
+          ],
           "kind": "executable",
           "url": "{{artifact-dir}}/dcos-hello-world.exe"
         }
