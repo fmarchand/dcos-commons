@@ -38,9 +38,10 @@ pods:
             template: {{CONFIG_TEMPLATE_PATH}}/hdfs-site.xml
             dest: {{HDFS_VERSION}}/etc/hadoop/hdfs-site.xml
         volume:
-          path: "hdfsnoha-name-path"
-          type: {{NAME_DISK_TYPE}}
-          size: {{NAME_DISK}}
+            path: name-data
+            type: {{NAME_DISK_TYPE}}
+            size: {{NAME_DISK}}
+
         readiness-check: # wait for the namenode to answer to hadoop fs
           cmd: export JAVA_HOME=$(ls -d $MESOS_SANDBOX/jre*/) && ./{{HDFS_VERSION}}/bin/hadoop fs -ls hdfs://namenode-$POD_INSTANCE_INDEX-node.hdfsnoha.mesos/
           interval: 5
@@ -82,7 +83,7 @@ pods:
             template: {{CONFIG_TEMPLATE_PATH}}/hdfs-site.xml
             dest: {{HDFS_VERSION}}/etc/hadoop/hdfs-site.xml
         volume:
-          path: "hdfsnoha-data-path"
+          path: "datanode-data"
           type: {{NODE_DISK_TYPE}}
           size: {{NODE_DISK}}
 
