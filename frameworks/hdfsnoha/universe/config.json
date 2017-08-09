@@ -39,12 +39,6 @@
             "type": "string",
             "enum": ["OFF", "FATAL", "ERROR", "WARN", "INFO", "DEBUG", "TRACE", "ALL"],
             "default": "INFO"
-          },
-          "hadoop_bundle_uri": {
-            "title" : "Hadoop bundle URI",
-            "description": "Hadoop bundle URI",
-            "type": "string",
-            "default": "http://apache.mediamirrors.org/hadoop/common/hadoop-2.8.1/hadoop-2.8.1.tar.gz"
           }
         },
         "required":[
@@ -71,19 +65,19 @@
             "title": "CPU count",
             "description": "CPU count for the namenode",
             "type": "number",
-            "default":0.1
+            "default":0.2
           },
           "mem": {
             "title": "Memory size (MB) for the  namenode",
             "description": "Memory size (MB) for the namenode",
             "type": "integer",
-            "default":252
+            "default":512
           },
           "disk": {
             "title": "Disk size (MB)",
             "description": "Template pod persistent disk requirements (in MB)",
             "type": "integer",
-            "default":25
+            "default":1024
           },
           "disk_type": {
             "title": "Disk type [ROOT, MOUNT]",
@@ -127,19 +121,19 @@
             "title": "CPU count",
             "description": "Template pod CPU requirements",
             "type": "number",
-            "default":0.1
+            "default":0.2
           },
           "mem": {
             "title": "Memory size (MB) per datanode",
             "description": "Memory size (MB) per datanode",
             "type": "integer",
-            "default":252
+            "default":512
           },
           "disk": {
             "title": "Disk size (MB)",
             "description": "Template pod persistent disk requirements (in MB)",
             "type": "integer",
-            "default":25
+            "default":1024
           },
           "disk_type": {
             "title": "Disk type [ROOT, MOUNT]",

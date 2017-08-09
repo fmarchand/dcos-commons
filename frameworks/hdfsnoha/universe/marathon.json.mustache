@@ -63,7 +63,7 @@
     "MESOS_AUTHENTICATEE": "com_mesosphere_dcos_ClassicRPCAuthenticatee",
     {{/service.secret_name}}
     "LIBMESOS_URI": "{{resource.assets.uris.libmesos-bundle-tar-gz}}",
-    "HADOOP_BUNDLE_URI": "{{service.hadoop_bundle_uri}}",
+    "HADOOP_BUNDLE_URI": "{{resource.assets.uris.hadoop-bundle-uri}}",
     "BOOTSTRAP_URI": "{{resource.assets.uris.bootstrap-zip}}",
     "CONFIG_TEMPLATE_PATH": "hdfsnoha-scheduler",
     "HDFS_DFS_REPLICATION" : "{{hdfs.dfs_replication}}"

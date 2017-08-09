@@ -5,7 +5,8 @@
       "libmesos-bundle-tar-gz": "{{libmesos-bundle-url}}",
       "scheduler-zip": "{{artifact-dir}}/hdfsnoha-scheduler.zip",
       "executor-zip": "{{artifact-dir}}/executor.zip",
-      "bootstrap-zip": "{{artifact-dir}}/bootstrap.zip"
+      "bootstrap-zip": "{{artifact-dir}}/bootstrap.zip",
+      "hadoop-bundle-uri" : "http://apache.mediamirrors.org/hadoop/common/hadoop-2.8.1/hadoop-2.8.1.tar.gz"
     }
   },
   "images": {
