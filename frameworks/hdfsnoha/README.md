@@ -40,7 +40,7 @@ With the default configuration you'll have 1 namenode with 1 datanode. You can c
 <a name="advanced-install"></a>
 # Advanced installation 
 
-You can install the HDFS NoHA with costumized configuration. 
+You can install the HDFS NoHA with customized configuration. 
 
 - From the command line with a dcos client : 
 
@@ -48,7 +48,7 @@ You can install the HDFS NoHA with costumized configuration.
 $ dcos package install hdfs-noha --yes --options=config.json 
 ````
 
-Here is an example of the config.json file
+Here is an example of the `config.json` file
 ````json
 {
   "service": {
@@ -91,7 +91,7 @@ In this example, for instance the namenode will be deployed on `172.16.2.84` and
 
 ## Customizable properties
 <table class="table">
-  <tr><td colspan="3" align="center">Service Section</td></tr>
+  <tr><td colspan="3" align="center"><b>Service Section</b></td></tr>
   <tr>
     <th>Property</th>
     <th>Type</th>
@@ -123,7 +123,7 @@ In this example, for instance the namenode will be deployed on `172.16.2.84` and
     <td>The principal for the service instance, or empty to use the default.</td>
   </tr>
   
-  <tr><td colspan="3" align="center">Namenode Section</td></tr>
+  <tr><td colspan="3" align="center"><b>Namenode Section</b></td></tr>
   
   <tr>
     <td>placement_constraint</td>
@@ -163,7 +163,7 @@ In this example, for instance the namenode will be deployed on `172.16.2.84` and
     </td>
   </tr>
   
-  <tr><td colspan="3" align="center">Datanode Section</td></tr>
+  <tr><td colspan="3" align="center"><b>Datanode Section</b></td></tr>
   <tr>
     <td>placement_constraint</td>
     <td>string</td>
@@ -215,7 +215,40 @@ In this example, for instance the namenode will be deployed on `172.16.2.84` and
   <tr>
     <td>count</td>
     <td>integer</td>
-    <td>The number of nodes of that node type for the cluster. There are always exactly two name nodes, so the name_node object has no count property. Users may select either 3 or 5 journal nodes. The default value of 3 is sufficient for most deployments and should only be overridden after careful thought. At least 3 data nodes should be configured, but this value may be increased to meet the storage needs of the deployment.</td>
+    <td>The number of datanodes for the cluster.</td>
+  </tr>
+
+  <tr><td colspan="3" align="center"><b>HDFS Section</b></td></tr>
+
+  <tr>
+    <td>dfs_replication</td>
+    <td>integer</td>
+    <td>HDFS Replica factor.</td>
+  </tr>
+  <tr>
+    <td>name_node_rpc_port</td>
+    <td>integer</td>
+    <td>The RPC port for the namenode.</td>
+  </tr>
+  <tr>
+    <td>name_node_http_port</td>
+    <td>integer</td>
+    <td>The HTTP port for the namenode.</td>
+  </tr>
+  <tr>
+    <td>data_node_rpc_port</td>
+    <td>integer</td>
+    <td>The RPC port used by datanodes.</td>
+  </tr>
+  <tr>
+    <td>data_node_http_port</td>
+    <td>integer</td>
+    <td>The HTTP port used by datanodes.</td>
+  </tr>
+  <tr>
+    <td>data_node_ipc_port</td>
+    <td>integer</td>
+    <td>The IPC port used by datanodes.</td>
   </tr>
 </table>
 
@@ -241,15 +274,3 @@ For the two methods you need to use the janitor to remove the framework from Zoo
 ````
 $ dcos node ssh --master-proxy --leader "docker run mesosphere/janitor /janitor.py -r hdfsnoha-role -p hdfsnoha-principal -z dcos-service-hdfsnoha"
 ````
-
-### 1.0.1-1.0.0
-#### Breaking Changes
-#### New Features
-#### Improvements
-#### Bug Fixes
-
-### 1.0.0-1.0.0
-#### Breaking Changes
-#### Features
-#### Improvements
-#### Bug Fixes

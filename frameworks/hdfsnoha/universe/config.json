@@ -137,6 +137,12 @@
               "MOUNT"
             ],
             "default": "ROOT"
+          },
+          "strategy": {
+            "title": "The strategy used to deploy datanodes",
+            "description": "The strategy used to deploy datanodes : parallel (default) or serial",
+            "type": "string",
+            "default":"parallel"
           }
         },
         "required":[
@@ -144,6 +150,7 @@
           "cpus",
           "mem",
           "disk",
+          "strategy",
           "disk_type"
         ]
       },
@@ -178,7 +185,7 @@
           },
           "data_node_ipc_port": {
             "type": "integer",
-            "description": "The IPS port used by Data Nodes.",
+            "description": "The IPC port used by Data Nodes.",
             "default": 9005
           }
         },

@@ -95,5 +95,5 @@ plans:
         strategy: serial
         pod: namenode
       datanode-phase:
-        strategy: parallel
+        strategy: {{NODE_STRATEGY}}
         pod: datanode
