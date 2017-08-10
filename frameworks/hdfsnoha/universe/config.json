@@ -28,12 +28,6 @@
             "type": "boolean",
             "default": false
           },
-          "secret_name": {
-            "title": "Credential secret name (optional)",
-            "description": "Name of the Secret Store credentials to use for DC/OS service authentication. This should be left empty unless service authentication is needed.",
-            "type": "string",
-            "default": ""
-          },
           "log_level": {
             "description": "The log level for the DC/OS service.",
             "type": "string",
@@ -52,7 +46,7 @@
         "properties": {
           "placement_constraint": {
             "title": "Placement constraint for namenode",
-            "description": "Marathon-style placement constraint for nodes. Example: 'hostname:UNIQUE'",
+            "description": "Marathon-style placement constraint for the namenode. Example: 'hostname:UNIQUE' or 'hostname:LIKE:172.16.2.8[5-7]'",
             "type": "string",
             "default": ""
           },

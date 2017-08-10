@@ -6,13 +6,13 @@
       "scheduler-zip": "{{artifact-dir}}/hdfsnoha-scheduler.zip",
       "executor-zip": "{{artifact-dir}}/executor.zip",
       "bootstrap-zip": "{{artifact-dir}}/bootstrap.zip",
-      "hadoop-bundle-uri" : "http://apache.mediamirrors.org/hadoop/common/hadoop-2.8.1/hadoop-2.8.1.tar.gz"
+      "hadoop-bundle-uri" : "http://downloads.agaetis.fr/hdfsnoha/assets/hadoop-2.8.1.tar.gz"
     }
   },
   "images": {
-    "icon-small": "https://github.com/dcos/dcos-ui/blob/master/plugins/services/src/img/icon-service-default-small.png?raw=true",
-    "icon-medium": "https://github.com/dcos/dcos-ui/blob/master/plugins/services/src/img/icon-service-default-medium.png?raw=true",
-    "icon-large": "https://github.com/dcos/dcos-ui/blob/master/plugins/services/src/img/icon-service-default-large.png?raw=true"
+    "icon-small": "http://downloads.agaetis.fr/hdfsnoha/assets/icon-service-hdfsnoha-small.png",
+    "icon-medium": "http://downloads.agaetis.fr/hdfsnoha/assets/icon-service-hdfsnoha-medium.png",
+    "icon-large": "http://downloads.agaetis.fr/hdfsnoha/assets/icon-service-hdfsnoha-large.png"
   },
   "cli":{
     "binaries":{

@@ -2,12 +2,12 @@
   "packagingVersion": "3.0",
   "minDcosReleaseVersion": "1.8",
   "name": "hdfs-noha",
-  "version": "{{package-version}}",
+  "version": "0.1-2.8.1",
   "maintainer": "fmarchand@agaetis.fr",
-  "description": "A simple HDFS service without HA (Only one namenode and no Zookeeper) on DC/OS. A typical use case would be to deploy a HDFS cluster just to be able to work with a notebook and Spark",
+  "description": "A simple HDFS service without HA. Minimal installation of the HDFS Service with High Availability is prohibitive when you just want to provide a small HDFS cluster to few datascientists or just to test a simple program using HDFS. This DC/OS service was designed for that. It offers a minimal installation of a HDFS cluster without all the HA components (journal nodes, zkfc's or second namenode) and without any update or replace strategies for namenodes or datanodes.",
   "selected": false,
   "framework": true,
-  "tags": ["hdfsnoha"],
-  "postInstallNotes": "HDFS Non-HA is being installed!\n\n\tDocumentation: TBD !",
+  "tags": ["hdfsnoha", "hdfs","hadoop", "dfs"],
+  "postInstallNotes": "HDFS Non-HA is being installed!\n\n\tDocumentation: https://github.com/fmarchand/dcos-commons/tree/master/frameworks/hdfsnoha/README.md",
   "postUninstallNotes": "DC/OS HDFS Non-HA is being uninstalled."
 }
