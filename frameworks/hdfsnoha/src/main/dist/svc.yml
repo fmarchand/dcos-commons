@@ -43,7 +43,7 @@ pods:
             size: {{NAME_DISK}}
 
         readiness-check: # wait for the namenode to answer to hadoop fs
-          cmd: export JAVA_HOME=$(ls -d $MESOS_SANDBOX/jre*/) && ./{{HDFS_VERSION}}/bin/hadoop fs -ls hdfs://namenode-$POD_INSTANCE_INDEX-node.hdfsnoha.mesos/
+          cmd: export JAVA_HOME=$(ls -d $MESOS_SANDBOX/jre*/) && ./{{HDFS_VERSION}}/bin/hadoop fs -ls hdfs://namenode-$POD_INSTANCE_INDEX-node.hdfsnoha.mesos:{{TASKCFG_ALL_NAME_NODE_RPC_PORT}}/
           interval: 5
           delay: 0
           timeout: 60

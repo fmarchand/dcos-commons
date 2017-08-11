@@ -252,6 +252,19 @@ In this example, for instance the namenode will be deployed on `172.16.2.84` and
   </tr>
 </table>
 
+<a name="Test your HDFS cluster"></a>
+# Test your HDFS cluster
+
+Try to copy a file on the HDFS cluster :
+
+    $ hadoop fs -copyFromLocal <your-file> hdfs://<namenode host>:<name_node_rpc_port>/
+
+Don't forget to put the same namenode RPC port if you changed it. The default RPC port for the namenode is `9001`.
+
+You can check if the file is present on the cluster connecting to the HDFS UI at this address : `http://<namenode host>:<name_node_http_port>`
+
+Don't forget to put the same namenode HTTP port if you changed it. The default HTTP port for the namenode is `9002`.
+
 <a name="uninstall"></a>
 # Uninstallation
 

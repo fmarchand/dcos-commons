@@ -10,8 +10,8 @@
         <value>{{MESOS_SANDBOX}}/datanode-data</value>
     </property>
     <property>
-        <name>dfs.replication</name>
-        <value>{{HDFS_DFS_REPLICATION}}</value>
+        <name>dfs.namenode.replication.min</name>
+        <value>{{HDFS_DFS_MIN_REPLICATION}}</value>
     </property>
     <property>
         <name>dfs.namenode.datanode.registration.ip-hostname-check</name>
@@ -20,5 +20,29 @@
     <property>
         <name>dfs.permissions</name>
         <value>false</value>
+    </property>
+
+    <!-- datanodes -->
+    <property>
+        <name>dfs.datanode.address</name>
+        <value>0.0.0.0:{{DATA_NODE_RPC_PORT}}</value>
+    </property>
+    <property>
+        <name>dfs.datanode.http.address</name>
+        <value>0.0.0.0:{{DATA_NODE_HTTP_PORT}}</value>
+    </property>
+    <property>
+        <name>dfs.datanode.ipc.address</name>
+        <value>0.0.0.0:{{DATA_NODE_IPC_PORT}}</value>
+    </property>
+
+    <!-- namenode -->
+    <property>
+        <name>dfs.namenode.rpc-address</name>
+        <value>namenode-0-node.{{FRAMEWORK_HOST}}:{{NAME_NODE_RPC_PORT}}</value>
+    </property>
+    <property>
+        <name>dfs.namenode.http-address</name>
+        <value>namenode-0-node.{{FRAMEWORK_HOST}}:{{NAME_NODE_HTTP_PORT}}</value>
     </property>
 </configuration>
