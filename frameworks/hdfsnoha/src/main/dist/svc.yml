@@ -20,7 +20,7 @@ pods:
         goal: RUNNING
         cmd: >
           export JAVA_HOME=$(ls -d $MESOS_SANDBOX/jre*/) &&
-          ./bootstrap && {{HDFS_VERSION}}/bin/hadoop namenode -format &&
+          ./bootstrap && {{HDFS_VERSION}}/bin/hadoop namenode -format -force &&
           export TASK_IP=$(./bootstrap --get-task-ip) && echo "NAMENODE IP : $TASK_IP" &&
           ./bootstrap && {{HDFS_VERSION}}/bin/hdfs namenode
         cpus: {{NAME_CPUS}}
@@ -95,5 +95,11 @@ plans:
         strategy: serial
         pod: namenode
       datanode-phase:
+        strategy: {{NODE_STRATEGY}}
+        pod: datanode
+  update:
+    strategy: serial
+    phases:
+      data:
         strategy: {{NODE_STRATEGY}}
         pod: datanode
